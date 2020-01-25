@@ -2,14 +2,14 @@ extends VehicleBody
 
 func rotation(event : InputEventKey):
 	match char(event.scancode):
-		"A": return 0.8
-		"D": return -0.8
+		"A": return 0.1
+		"D": return -0.1
 	return 0
 
 func force(event : InputEventKey):
 	match char(event.scancode):
-		"W": return 400
-		"S": return -400
+		"W": return 10
+		"S": return -10
 	return 0
 
 # Called when the node enters the scene tree for the first time.
