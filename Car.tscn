@@ -10,16 +10,16 @@ extents = Vector3( 2, 2, 1 )
 
 [sub_resource type="CubeMesh" id=3]
 
-[sub_resource type="Gradient" id=7]
+[sub_resource type="Gradient" id=4]
 
 [sub_resource type="GradientTexture" id=5]
-gradient = SubResource( 7 )
+gradient = SubResource( 4 )
 
 [sub_resource type="SpatialMaterial" id=6]
 albedo_color = Color( 0.192157, 0.411765, 0.811765, 1 )
 albedo_texture = SubResource( 5 )
 
-[sub_resource type="CylinderMesh" id=4]
+[sub_resource type="CylinderMesh" id=7]
 material = SubResource( 6 )
 
 [node name="Spatial" type="Spatial"]
@@ -38,46 +38,45 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0618837, 0.123079, -0.11042
 shape = SubResource( 2 )
 
 [node name="Camera" type="Camera" parent="VehicleBody"]
-transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, -0.794274, 1.77729, 2.57705 )
+transform = Transform( -1, 2.99003e-08, -8.21505e-08, 0, 0.939693, 0.34202, 8.74228e-08, 0.34202, -0.939693, 0, 1, -4 )
 fov = 86.4004
 
 [node name="MeshInstance" type="MeshInstance" parent="VehicleBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.545386, 0.381508, 0.479594 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.443, 0 )
 mesh = SubResource( 3 )
 material/0 = null
 
-[node name="VehicleWheel" type="VehicleWheel" parent="VehicleBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.847837, -1.24755, 0.054774 )
+[node name="rearLeft" type="VehicleWheel" parent="VehicleBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1.248, -1 )
 use_as_traction = true
 use_as_steering = true
 
-[node name="CSGMesh2" type="CSGMesh" parent="VehicleBody/VehicleWheel"]
+[node name="CSGMesh2" type="CSGMesh" parent="VehicleBody/rearLeft"]
 transform = Transform( -2.18557e-08, -0.5, 0, 0.5, -2.18557e-08, 0, 0, 0, 0.5, 0, 0, 0 )
-mesh = SubResource( 4 )
+mesh = SubResource( 7 )
 
-[node name="VehicleWheel3" type="VehicleWheel" parent="VehicleBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75929, -1.24755, 1.20383 )
+[node name="frontRight" type="VehicleWheel" parent="VehicleBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -1.248, 1 )
 use_as_traction = true
 use_as_steering = true
 
-[node name="CSGMesh" type="CSGMesh" parent="VehicleBody/VehicleWheel3"]
+[node name="CSGMesh" type="CSGMesh" parent="VehicleBody/frontRight"]
 transform = Transform( -2.18557e-08, -0.5, 0, 0.5, -2.18557e-08, 0, 0, 0, 0.5, 0, 0, 0 )
-mesh = SubResource( 4 )
+mesh = SubResource( 7 )
 
-[node name="VehicleWheel2" type="VehicleWheel" parent="VehicleBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75929, -1.24755, 0.054774 )
+[node name="rearRight" type="VehicleWheel" parent="VehicleBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -1.248, -1 )
 use_as_traction = true
 use_as_steering = true
 
-[node name="CSGMesh2" type="CSGMesh" parent="VehicleBody/VehicleWheel2"]
+[node name="CSGMesh2" type="CSGMesh" parent="VehicleBody/rearRight"]
 transform = Transform( -2.18557e-08, -0.5, 0, 0.5, -2.18557e-08, 0, 0, 0, 0.5, 0, 0, 0 )
-mesh = SubResource( 4 )
+mesh = SubResource( 7 )
 
-[node name="VehicleWheel4" type="VehicleWheel" parent="VehicleBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.845234, -1.24755, 1.20245 )
+[node name="frontLeft" type="VehicleWheel" parent="VehicleBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1.248, 1 )
 use_as_traction = true
-use_as_steering = true
 
-[node name="CSGMesh3" type="CSGMesh" parent="VehicleBody/VehicleWheel4"]
+[node name="CSGMesh3" type="CSGMesh" parent="VehicleBody/frontLeft"]
 transform = Transform( -2.18557e-08, -0.5, 0, 0.5, -2.18557e-08, 0, 0, 0, 0.5, 0, 0, 0 )
-mesh = SubResource( 4 )
+mesh = SubResource( 7 )
