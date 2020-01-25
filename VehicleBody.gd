@@ -8,8 +8,8 @@ func rotation(event : InputEventKey):
 
 func force(event : InputEventKey):
 	match char(event.scancode):
-		"W": return 10
-		"S": return -10
+		"W": return 200
+		"S": return -200
 	return 0
 
 # Called when the node enters the scene tree for the first time.
