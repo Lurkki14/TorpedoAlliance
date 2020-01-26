@@ -1,7 +1,11 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://VehicleBody.gd" type="Script" id=1]
 [ext_resource path="res://Camera.gd" type="Script" id=2]
+[ext_resource path="res://WheelBL.gd" type="Script" id=3]
+[ext_resource path="res://WheelFR.gd" type="Script" id=4]
+[ext_resource path="res://WheelFL.gd" type="Script" id=5]
+[ext_resource path="res://WheelBR.gd" type="Script" id=6]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Cube"
@@ -157,6 +161,7 @@ material/0 = null
 
 [node name="prop_lamps" type="MeshInstance" parent="."]
 transform = Transform( 0.192119, 0, 0, 0, -8.3978e-09, -0.192119, 0, 0.192119, -8.3978e-09, 0, 0.269924, 2.38419e-07 )
+visible = false
 mesh = SubResource( 2 )
 material/0 = null
 
@@ -181,76 +186,76 @@ material/0 = null
 transform = Transform( 1, 0, 0, 0, 0.54, 0, 0, 0, 1, 0, 0.510235, 0.261686 )
 shape = SubResource( 6 )
 
-[node name="VehicleWheel" type="VehicleWheel" parent="."]
+[node name="WheelBL" type="VehicleWheel" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.507, 0, -1.398 )
 use_as_traction = true
 wheel_roll_influence = 1.0
 wheel_radius = 0.58
-wheel_rest_length = 0.3
 wheel_friction_slip = 1.0
-suspension_travel = 0.3
-suspension_stiffness = 50.0
+suspension_travel = 0.15
+suspension_stiffness = 30.0
 suspension_max_force = 4000.0
 damping_compression = 0.5
-damping_relaxation = 0.7
+damping_relaxation = 1.0
+script = ExtResource( 3 )
 
-[node name="wheel_back_left" type="MeshInstance" parent="VehicleWheel"]
+[node name="wheel_back_left" type="MeshInstance" parent="WheelBL"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 mesh = SubResource( 7 )
 material/0 = null
 
-[node name="VehicleWheel2" type="VehicleWheel" parent="."]
+[node name="WheelFR" type="VehicleWheel" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.507, 0, 1.818 )
 use_as_traction = true
 use_as_steering = true
 wheel_roll_influence = 1.0
 wheel_radius = 0.58
-wheel_rest_length = 0.3
-wheel_friction_slip = 0.9
-suspension_travel = 0.3
-suspension_stiffness = 50.0
+wheel_friction_slip = 1.0
+suspension_travel = 0.15
+suspension_stiffness = 30.0
 suspension_max_force = 4000.0
 damping_compression = 0.5
-damping_relaxation = 0.7
+damping_relaxation = 1.0
+script = ExtResource( 4 )
 
-[node name="wheel_front_right" type="MeshInstance" parent="VehicleWheel2"]
+[node name="wheel_front_right" type="MeshInstance" parent="WheelFR"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 mesh = SubResource( 8 )
 material/0 = null
 
-[node name="VehicleWheel3" type="VehicleWheel" parent="."]
+[node name="WheelFL" type="VehicleWheel" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.507, 0, 1.818 )
 use_as_traction = true
 use_as_steering = true
 wheel_roll_influence = 1.0
 wheel_radius = 0.58
-wheel_rest_length = 0.3
 wheel_friction_slip = 1.0
-suspension_travel = 0.3
-suspension_stiffness = 50.0
+suspension_travel = 0.15
+suspension_stiffness = 30.0
 suspension_max_force = 4000.0
 damping_compression = 0.5
-damping_relaxation = 0.7
+damping_relaxation = 1.0
+script = ExtResource( 5 )
 
-[node name="wheel_front_left" type="MeshInstance" parent="VehicleWheel3"]
+[node name="wheel_front_left" type="MeshInstance" parent="WheelFL"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 mesh = SubResource( 9 )
 material/0 = null
 
-[node name="VehicleWheel4" type="VehicleWheel" parent="."]
+[node name="WheelBR" type="VehicleWheel" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.507, 0, -1.398 )
 use_as_traction = true
 wheel_roll_influence = 1.0
 wheel_radius = 0.58
-wheel_rest_length = 0.3
-wheel_friction_slip = 0.9
-suspension_travel = 0.3
-suspension_stiffness = 50.0
+wheel_friction_slip = 1.0
+suspension_travel = 0.15
+suspension_stiffness = 30.0
 suspension_max_force = 4000.0
 damping_compression = 0.5
-damping_relaxation = 0.7
+damping_relaxation = 1.0
+script = ExtResource( 6 )
 
-[node name="wheel_back_right" type="MeshInstance" parent="VehicleWheel4"]
+[node name="wheel_back_right" type="MeshInstance" parent="WheelBR"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 mesh = SubResource( 10 )
 material/0 = null

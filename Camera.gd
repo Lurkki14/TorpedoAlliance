@@ -2,13 +2,13 @@ extends Camera
 
 # Member variables
 var collision_exception = []
-export var min_distance = 1
-export var max_distance = 20.0
+export var min_distance = 0.4
+export var max_distance = 9.0
 export var angle_v_adjust = 0.0
 export var autoturn_ray_aperture = 25
 export var autoturn_speed = 50
-var max_height = 2.0
-var min_height = 0
+var max_height = 5.0
+var min_height = 2.0
 
 
 func _physics_process(dt):
