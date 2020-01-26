@@ -1,35 +1,44 @@
 extends VehicleBody
 
-func rotation(event : InputEventKey):
-	match char(event.scancode):
-		"A": return 0.1
-		"D": return -0.1
-	return 0
+# Member variables
+const STEER_SPEED = 1
+const STEER_LIMIT = 0.7
 
-func force(event : InputEventKey):
-	match char(event.scancode):
-		"W": return 200
-		"S": return -200
-	return 0
+var steer_angle = 0
+var steer_target = 0
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	set_engine_force(0)
+export var engine_force_value = 400
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	print("engine force: ", get_engine_force(), " steering: ", get_steering())
-
-func _input(event):
-	if event is InputEventKey and event.is_pressed():
-		if rotation(event) != NAN:
-			print("setting steering to ", rotation(event))
-			set_steering(rotation(event))
-		
-		if force(event) != NAN:
-			print("setting force to ", force(event))
-			set_engine_force(force(event))
-			
-	if event is InputEventKey and not event.is_pressed():
-		set_steering(0)
-		set_engine_force(0)
+func _physics_process(delta):
+	var fwd_mps = transform.basis.xform_inv(linear_velocity).x
+	
+	if Input.is_action_pressed("ui_left"):
+		steer_target = STEER_LIMIT
+	elif Input.is_action_pressed("ui_right"):
+		steer_target = -STEER_LIMIT
+	else:
+		steer_target = 0
+	
+	if Input.is_action_pressed("ui_up"):
+		engine_force = engine_force_value
+	else:
+		engine_force = 0
+	
+	if Input.is_action_pressed("ui_down"):
+		if (fwd_mps >= -1):
+			engine_force = -engine_force_value
+		else:
+			brake = 1
+	else:
+		brake = 0.0
+	
+	if steer_target < steer_angle:
+		steer_angle -= STEER_SPEED * delta
+		if steer_target > steer_angle:
+			steer_angle = steer_target
+	elif steer_target > steer_angle:
+		steer_angle += STEER_SPEED * delta
+		if steer_target < steer_angle:
+			steer_angle = steer_target
+	
+	steering = steer_angle
