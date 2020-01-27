@@ -41,19 +41,19 @@ func _ready():
 func _physics_process(delta):
 	var fwd_mps = transform.basis.xform_inv(linear_velocity).x
 	
-	if Input.is_action_pressed("ui_left"):
+	if Input.is_action_pressed("car_steer_left"):
 		steer_target = STEER_LIMIT
-	elif Input.is_action_pressed("ui_right"):
+	elif Input.is_action_pressed("car_steer_right"):
 		steer_target = -STEER_LIMIT
 	else:
 		steer_target = 0
 	
-	if Input.is_action_pressed("ui_up"):
+	if Input.is_action_pressed("car_accelerate"):
 		engine_force = engine_force_value
 	else:
 		engine_force = 0
 	
-	if Input.is_action_pressed("ui_down"):
+	if Input.is_action_pressed("car_reverse"):
 		if (fwd_mps >= -1):
 			engine_force = -engine_force_value
 		else:
