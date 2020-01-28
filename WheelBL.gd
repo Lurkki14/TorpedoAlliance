@@ -1,11 +1,9 @@
 extends VehicleWheel
 
-signal wheel_contact_bl
-var contact
+onready var body = get_node("../../placeholder_car")
 
 func _physics_process(delta):
 	if is_in_contact():
-		contact = true
+		body.wheel_contact.insert(0, true)
 	else:
-		contact = false
-	emit_signal("wheel_contact_bl", contact)
+		body.wheel_contact.insert(0, false)
