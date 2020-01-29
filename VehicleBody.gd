@@ -17,6 +17,7 @@ var count = 0
 export var engine_force_value = 400
 
 func countertorque() -> Vector3:
+	# FIXME reported angular velocity seems to reach infinity in some cases
 	var vel_vec = get_angular_velocity()
 	var magnitude = sqrt(pow(2, vel_vec.x) + pow(2, vel_vec.y) + pow(2, vel_vec.z))
 	if magnitude < 0.1:
@@ -25,7 +26,7 @@ func countertorque() -> Vector3:
 	var ang_vel = sqrt(ang_vel_sqr)
 	if ang_vel < 0.1:
 		return Vector3(0, 0, 0)
-	var ct_magnitude =  (-pitch_force / 32) * ang_vel_sqr
+	var ct_magnitude =  (-pitch_force / 16) * ang_vel_sqr
 	var ct = Vector3(ct_magnitude*vel_vec.x/ang_vel, ct_magnitude*vel_vec.y/ang_vel, ct_magnitude*vel_vec.z/ang_vel)
 	return ct
 
@@ -49,18 +50,26 @@ func _physics_process(delta):
 		car_jump -= 1
 	
 	var ct = countertorque()
+	apply_torque_impulse(ct)
+	print(ct)
 	
 	if Input.is_action_pressed("car_pitch_up") and car_jump < 2:
-		apply_torque_impulse(ct - torque(get_global_transform().basis.x, pitch_force))
+		apply_torque_impulse(-torque(get_global_transform().basis.x, pitch_force))
 		
 	if Input.is_action_pressed("car_pitch_down") and car_jump < 2:
-		apply_torque_impulse(ct + torque(get_global_transform().basis.x, pitch_force))
+		apply_torque_impulse(torque(get_global_transform().basis.x, pitch_force))
 		
 	if Input.is_action_pressed("car_yaw_left") and car_jump < 2:
-		apply_torque_impulse(ct + torque(get_global_transform().basis.y, pitch_force))
+		apply_torque_impulse(torque(get_global_transform().basis.y, pitch_force))
 		
 	if Input.is_action_pressed("car_yaw_right") and car_jump < 2:
-		apply_torque_impulse(ct - torque(get_global_transform().basis.y, pitch_force))
+		apply_torque_impulse(-torque(get_global_transform().basis.y, pitch_force))
+	
+	if Input.is_action_pressed("car_roll_right") and car_jump < 2:
+		apply_torque_impulse(torque(get_global_transform().basis.z, pitch_force))
+		
+	if Input.is_action_pressed("car_roll_left") and car_jump < 2:
+		apply_torque_impulse(-torque(get_global_transform().basis.z, pitch_force))
 	
 	if Input.is_action_pressed("car_steer_left"):
 		steer_target = STEER_LIMIT
