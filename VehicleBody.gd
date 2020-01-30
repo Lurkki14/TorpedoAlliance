@@ -1,7 +1,7 @@
 extends VehicleBody
 
-var wheel_contact = [false, false, false, false]
 var car_jump: int = 2 # 0 is no jump, 1 is one jump, 2 is two jumps remaining
+var reset_jump: bool
 var wheels = []
 
 # Member variables
@@ -55,6 +55,10 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("car_jump") and car_jump > 0:
 		apply_central_impulse(Vector3(0, 600, 0))
 		car_jump -= 1
+		if get_contact():
+			reset_jump = false
+		else:
+			reset_jump = true
 	
 	var ct = countertorque()
 	apply_torque_impulse(ct)
@@ -111,5 +115,5 @@ func _physics_process(delta):
 	
 	count = count + delta
 	
-	if get_contact():
+	if get_contact() and reset_jump:
 		car_jump = 2
