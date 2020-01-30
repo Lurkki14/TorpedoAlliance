@@ -1,11 +1,7 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://VehicleBody.gd" type="Script" id=1]
 [ext_resource path="res://Camera.gd" type="Script" id=2]
-[ext_resource path="res://WheelBL.gd" type="Script" id=3]
-[ext_resource path="res://WheelFR.gd" type="Script" id=4]
-[ext_resource path="res://WheelFL.gd" type="Script" id=5]
-[ext_resource path="res://WheelBR.gd" type="Script" id=6]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Cube"
@@ -197,7 +193,6 @@ suspension_stiffness = 30.0
 suspension_max_force = 4000.0
 damping_compression = 0.5
 damping_relaxation = 1.0
-script = ExtResource( 3 )
 
 [node name="wheel_back_left" type="MeshInstance" parent="WheelBL"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
@@ -216,7 +211,6 @@ suspension_stiffness = 30.0
 suspension_max_force = 4000.0
 damping_compression = 0.5
 damping_relaxation = 1.0
-script = ExtResource( 4 )
 
 [node name="wheel_front_right" type="MeshInstance" parent="WheelFR"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
@@ -235,7 +229,6 @@ suspension_stiffness = 30.0
 suspension_max_force = 4000.0
 damping_compression = 0.5
 damping_relaxation = 1.0
-script = ExtResource( 5 )
 
 [node name="wheel_front_left" type="MeshInstance" parent="WheelFL"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
@@ -253,7 +246,6 @@ suspension_stiffness = 30.0
 suspension_max_force = 4000.0
 damping_compression = 0.5
 damping_relaxation = 1.0
-script = ExtResource( 6 )
 
 [node name="wheel_back_right" type="MeshInstance" parent="WheelBR"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
