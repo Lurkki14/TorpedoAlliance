@@ -1,12 +1,15 @@
 extends VehicleBody
 
-var car_jump: int = 2 # 0 is no jump, 1 is one jump, 2 is two jumps remaining
-var reset_jump: bool
-var wheels = []
-
-# Member variables
 const STEER_SPEED = 1
 const STEER_LIMIT = 0.7
+
+const JUMP_FORCE = 600
+
+# 0 is no jump, 1 is one jump, 2 is two jumps remaining
+var jump_limit: int = 2
+var car_jump: int = jump_limit
+var reset_jump: bool
+var wheels = []
 
 var steer_angle = 0
 var steer_target = 0
@@ -25,7 +28,7 @@ func _ready():
 func countertorque() -> Vector3:
 	# FIXME reported angular velocity seems to reach infinity in some cases
 	var vel_vec = get_angular_velocity()
-	print(vel_vec)
+	#print(vel_vec)
 	var magnitude = sqrt(pow(vel_vec.x, 2) + pow(vel_vec.y, 2) + pow(vel_vec.z, 2))
 	if magnitude < 0.1:
 		return Vector3(0, 0, 0)
@@ -53,7 +56,9 @@ func _physics_process(delta):
 	var fwd_mps = transform.basis.xform_inv(linear_velocity).x
 	
 	if Input.is_action_just_pressed("car_jump") and car_jump > 0:
-		apply_central_impulse(Vector3(0, 600, 0))
+		var y_basis = get_global_transform().basis.y
+		var force_vector = Vector3(JUMP_FORCE * y_basis[0], JUMP_FORCE * y_basis[1], JUMP_FORCE * y_basis[2])
+		apply_central_impulse(force_vector)
 		car_jump -= 1
 		if get_contact():
 			reset_jump = false
@@ -62,24 +67,24 @@ func _physics_process(delta):
 	
 	var ct = countertorque()
 	apply_torque_impulse(ct)
-	print(delta)
+	#print(delta)
 	
-	if Input.is_action_pressed("car_pitch_up") and car_jump < 2:
+	if Input.is_action_pressed("car_pitch_up") and car_jump < jump_limit:
 		apply_torque_impulse(-torque(get_global_transform().basis.x, pitch_force))
 		
-	if Input.is_action_pressed("car_pitch_down") and car_jump < 2:
+	if Input.is_action_pressed("car_pitch_down") and car_jump < jump_limit:
 		apply_torque_impulse(torque(get_global_transform().basis.x, pitch_force))
 		
-	if Input.is_action_pressed("car_yaw_left") and car_jump < 2:
+	if Input.is_action_pressed("car_yaw_left") and car_jump < jump_limit:
 		apply_torque_impulse(torque(get_global_transform().basis.y, pitch_force))
 		
-	if Input.is_action_pressed("car_yaw_right") and car_jump < 2:
+	if Input.is_action_pressed("car_yaw_right") and car_jump < jump_limit:
 		apply_torque_impulse(-torque(get_global_transform().basis.y, pitch_force))
 	
-	if Input.is_action_pressed("car_roll_right") and car_jump < 2:
+	if Input.is_action_pressed("car_roll_right") and car_jump < jump_limit:
 		apply_torque_impulse(torque(get_global_transform().basis.z, pitch_force))
 		
-	if Input.is_action_pressed("car_roll_left") and car_jump < 2:
+	if Input.is_action_pressed("car_roll_left") and car_jump < jump_limit:
 		apply_torque_impulse(-torque(get_global_transform().basis.z, pitch_force))
 	
 	if Input.is_action_pressed("car_steer_left"):
@@ -116,4 +121,4 @@ func _physics_process(delta):
 	count = count + delta
 	
 	if get_contact() and reset_jump:
-		car_jump = 2
+		car_jump = jump_limit
