@@ -18,6 +18,7 @@ const BOOST_FORCE = 50
 const MAX_VELOCITY = 20
 
 var pitch_force = 400
+var ct_constant = pitch_force/64
 var refspeed = 10
 var max_downforce = 50
 
@@ -44,20 +45,8 @@ func boost(basis : Vector3) -> Vector3:
 	return basis * BOOST_FORCE
 
 func countertorque() -> Vector3:
-	# FIXME reported angular velocity seems to reach infinity in some cases
 	var vel_vec = get_angular_velocity()
-	#print(vel_vec)
-	var magnitude = sqrt(pow(vel_vec.x, 2) + pow(vel_vec.y, 2) + pow(vel_vec.z, 2))
-	if magnitude < 0.1:
-		return Vector3(0, 0, 0)
-	var ang_vel_sqr = vel_vec.x*vel_vec.x + vel_vec.y*vel_vec.y + vel_vec.z*vel_vec.z
-	var ang_vel = sqrt(ang_vel_sqr)
-	if ang_vel < 0.1:
-		return Vector3(0, 0, 0)
-	var ct_magnitude =  (-pitch_force / 64) * ang_vel_sqr
-	#var ct_magnitude = 100 * ang_vel_sqr
-	var ct = Vector3(ct_magnitude*vel_vec.x/ang_vel, ct_magnitude*vel_vec.y/ang_vel, ct_magnitude*vel_vec.z/ang_vel)
-	return ct
+	return -ct_constant * vel_vec.length_squared() * vel_vec.normalized()
 
 # Used for pitch, yaw and roll torque
 func torque(basis : Vector3, force : int) -> Vector3:
