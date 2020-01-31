@@ -14,6 +14,9 @@ var wheels = []
 var steer_angle = 0
 var steer_target = 0
 
+const BOOST_FORCE = 50
+const MAX_VELOCITY = 20
+
 var pitch_force = 400
 var refspeed = 10
 var max_downforce = 50
@@ -34,6 +37,11 @@ func downforce(velocity : Vector3, basis : Vector3) -> Vector3:
 	var downforce_prc = sig(velocity.length() / refspeed)
 	var downforce_mult = -max_downforce * downforce_prc
 	return basis * downforce_mult
+
+func boost(basis : Vector3) -> Vector3:
+	if get_linear_velocity().length() > MAX_VELOCITY:
+		return Vector3(0, 0, 0)
+	return basis * BOOST_FORCE
 
 func countertorque() -> Vector3:
 	# FIXME reported angular velocity seems to reach infinity in some cases
@@ -65,13 +73,17 @@ func get_contact() -> bool:
 	return true
 
 func _physics_process(delta):
-	print(car_jump)
+	#print(car_jump)
 	
 	if get_contact():
 		apply_central_impulse(downforce(get_linear_velocity(), get_global_transform().basis.y))
-		print("downforce: ", downforce(get_linear_velocity(), get_global_transform().basis.y))
+		#print("downforce: ", downforce(get_linear_velocity(), get_global_transform().basis.y))
 		
 	var fwd_mps = transform.basis.xform_inv(linear_velocity).x
+	
+	if Input.is_action_pressed("car_boost"):
+		print(boost(get_global_transform().basis.z))
+		apply_central_impulse(boost(get_global_transform().basis.z))
 	
 	if Input.is_action_just_pressed("car_jump") and car_jump > 0:
 		var y_basis = get_global_transform().basis.y
