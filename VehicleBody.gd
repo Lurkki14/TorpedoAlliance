@@ -58,12 +58,19 @@ func get_contact() -> bool:
 			return false
 	return true
 
+var CONTACT_IGNORE_MAX_TIME = 3.0/60
+var contact_ignore_time = 0
+
 func _physics_process(delta):
 	#print(car_jump)
 	
-	if get_contact():
+	if contact_ignore_time > 0:
+		contact_ignore_time -= delta
+	
+	if get_contact() and contact_ignore_time <= 0:
 		apply_central_impulse(downforce(get_linear_velocity(), get_global_transform().basis.y))
 		#print("downforce: ", downforce(get_linear_velocity(), get_global_transform().basis.y))
+		car_jump = JUMP_LIMIT
 		
 	var fwd_mps = transform.basis.xform_inv(linear_velocity).x
 	
@@ -72,18 +79,14 @@ func _physics_process(delta):
 		apply_central_impulse(boost(get_global_transform().basis.z))
 	
 	if Input.is_action_just_pressed("car_jump") and car_jump > 0:
+		if contact_ignore_time <= 0:
+			contact_ignore_time = CONTACT_IGNORE_MAX_TIME
+		contact_ignore_time = CONTACT_IGNORE_MAX_TIME
 		var y_basis = get_global_transform().basis.y
 		var force_vector = JUMP_FORCE * y_basis
 		apply_central_impulse(force_vector)
 		car_jump -= 1
-		# Jump reset control is needed to not gain an extra jump after
-		# the first jump while the wheels are still touching the ground.
-		if get_contact():
-			reset_jump = false
 	
-	if car_jump == 0:
-		reset_jump = true
-		
 	var ct = countertorque()
 	apply_torque_impulse(ct)
 	
@@ -138,5 +141,3 @@ func _physics_process(delta):
 	
 	count = count + delta
 	
-	if get_contact() and reset_jump:
-		car_jump = JUMP_LIMIT
