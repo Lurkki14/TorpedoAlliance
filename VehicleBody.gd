@@ -29,9 +29,20 @@ var count = 0
 export var engine_force_value = 400
 
 func _ready():
+	set_contact_monitor(true)
+	set_max_contacts_reported(1)
 	for node in get_children():
 		if node is VehicleWheel:
 			wheels.append(node)
+
+func body_contact() -> bool:
+	return get_colliding_bodies().size() > 0
+
+func wheel_contact() -> bool:
+	for wheel in wheels:
+		if wheel.is_in_contact():
+			return true
+	return false
 
 func sig(x : float) -> float:
 	return (2 / (1 + exp(-x))) - 1
@@ -88,22 +99,23 @@ func _physics_process(delta):
 	var ct = countertorque()
 	apply_torque_impulse(ct)
 	
-	if Input.is_action_pressed("car_pitch_up") and car_jump < JUMP_LIMIT:
+	if Input.is_action_pressed("car_pitch_up") and not wheel_contact() and not body_contact():
 		apply_torque_impulse(-torque(get_global_transform().basis.x, pitch_force))
 		
-	if Input.is_action_pressed("car_pitch_down") and car_jump < JUMP_LIMIT:
+	if Input.is_action_pressed("car_pitch_down") and not wheel_contact() and not body_contact():
 		apply_torque_impulse(torque(get_global_transform().basis.x, pitch_force))
 		
-	if Input.is_action_pressed("car_yaw_left") and car_jump < JUMP_LIMIT:
+	# Yaw is allowed if car is on its roof
+	if Input.is_action_pressed("car_yaw_left") and not wheel_contact():
 		apply_torque_impulse(torque(get_global_transform().basis.y, pitch_force))
 		
-	if Input.is_action_pressed("car_yaw_right") and car_jump < JUMP_LIMIT:
+	if Input.is_action_pressed("car_yaw_right") and not wheel_contact():
 		apply_torque_impulse(-torque(get_global_transform().basis.y, pitch_force))
 	
-	if Input.is_action_pressed("car_roll_right") and car_jump < JUMP_LIMIT:
+	if Input.is_action_pressed("car_roll_right") and not wheel_contact():
 		apply_torque_impulse(torque(get_global_transform().basis.z, pitch_force))
 		
-	if Input.is_action_pressed("car_roll_left") and car_jump < JUMP_LIMIT:
+	if Input.is_action_pressed("car_roll_left") and not wheel_contact():
 		apply_torque_impulse(-torque(get_global_transform().basis.z, pitch_force))
 	
 	if Input.is_action_pressed("car_steer_left"):
