@@ -50,10 +50,7 @@ func countertorque() -> Vector3:
 
 # Used for pitch, yaw and roll torque
 func torque(basis : Vector3, force : int) -> Vector3:
-	var fx = basis.x * force
-	var fy = basis.y * force
-	var fz = basis.z * force
-	return Vector3(fx, fy, fz)
+	return force * basis
 
 func get_contact() -> bool:
 	for wheel in wheels:
