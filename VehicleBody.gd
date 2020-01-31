@@ -6,16 +6,18 @@ const STEER_LIMIT = 0.7
 const JUMP_FORCE: int = 600
 const JUMP_LIMIT: int = 2
 
+const CONTACT_IGNORE_MAX_TIME: float = 5.0/60.0
+
+const BOOST_FORCE = 50
+const MAX_VELOCITY = 20
 # 0 is no jump, 1 is one jump, 2 is two jumps remaining
 var car_jump: int = JUMP_LIMIT
 var reset_jump: bool
 var wheels = []
+var contact_ignore_time: float = CONTACT_IGNORE_MAX_TIME
 
 var steer_angle = 0
 var steer_target = 0
-
-const BOOST_FORCE = 50
-const MAX_VELOCITY = 20
 
 var pitch_force = 400
 var ct_constant = pitch_force/64
@@ -58,12 +60,8 @@ func get_contact() -> bool:
 			return false
 	return true
 
-var CONTACT_IGNORE_MAX_TIME = 3.0/60
-var contact_ignore_time = 0
-
 func _physics_process(delta):
-	#print(car_jump)
-	
+	print(car_jump)
 	if contact_ignore_time > 0:
 		contact_ignore_time -= delta
 	
