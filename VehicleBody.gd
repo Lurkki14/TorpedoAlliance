@@ -15,6 +15,8 @@ var steer_angle = 0
 var steer_target = 0
 
 var pitch_force = 400
+var refspeed = 10
+var max_downforce = 50
 
 var count = 0
 
@@ -24,6 +26,14 @@ func _ready():
 	for node in get_children():
 		if node is VehicleWheel:
 			wheels.append(node)
+
+func sig(x : float) -> float:
+	return (2 / (1 + exp(-x))) - 1
+
+func downforce(velocity : Vector3, basis : Vector3) -> Vector3:
+	var downforce_prc = sig(velocity.length() / refspeed)
+	var downforce_mult = -max_downforce * downforce_prc
+	return basis * downforce_mult
 
 func countertorque() -> Vector3:
 	# FIXME reported angular velocity seems to reach infinity in some cases
@@ -36,10 +46,12 @@ func countertorque() -> Vector3:
 	var ang_vel = sqrt(ang_vel_sqr)
 	if ang_vel < 0.1:
 		return Vector3(0, 0, 0)
-	var ct_magnitude =  (-pitch_force / 2e4) * ang_vel_sqr
+	var ct_magnitude =  (-pitch_force / 64) * ang_vel_sqr
+	#var ct_magnitude = 100 * ang_vel_sqr
 	var ct = Vector3(ct_magnitude*vel_vec.x/ang_vel, ct_magnitude*vel_vec.y/ang_vel, ct_magnitude*vel_vec.z/ang_vel)
 	return ct
 
+# Used for pitch, yaw and roll torque
 func torque(basis : Vector3, force : int) -> Vector3:
 	var fx = basis.x * force
 	var fy = basis.y * force
@@ -51,9 +63,14 @@ func get_contact() -> bool:
 		if not wheel.is_in_contact():
 			return false
 	return true
-		
+
 func _physics_process(delta):
 	print(car_jump)
+	
+	if get_contact():
+		apply_central_impulse(downforce(get_linear_velocity(), get_global_transform().basis.y))
+		print("downforce: ", downforce(get_linear_velocity(), get_global_transform().basis.y))
+		
 	var fwd_mps = transform.basis.xform_inv(linear_velocity).x
 	
 	if Input.is_action_just_pressed("car_jump") and car_jump > 0:
@@ -71,7 +88,6 @@ func _physics_process(delta):
 		
 	var ct = countertorque()
 	apply_torque_impulse(ct)
-	#print(delta)
 	
 	if Input.is_action_pressed("car_pitch_up") and car_jump < JUMP_LIMIT:
 		apply_torque_impulse(-torque(get_global_transform().basis.x, pitch_force))
