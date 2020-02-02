@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://NewCar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Ball.tscn" type="PackedScene" id=2]
+[ext_resource path="res://floor_physics_material.tres" type="PhysicsMaterial" id=3]
 
 [sub_resource type="ShaderMaterial" id=1]
 
@@ -25,6 +26,7 @@ mesh = SubResource( 4 )
 material/0 = null
 
 [node name="StaticBody" type="StaticBody" parent="Floor"]
+physics_material_override = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Floor/StaticBody"]
 shape = SubResource( 5 )
@@ -36,6 +38,7 @@ mesh = SubResource( 4 )
 material/0 = null
 
 [node name="StaticBody" type="StaticBody" parent="Floor2"]
+physics_material_override = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Floor2/StaticBody"]
 shape = SubResource( 5 )
@@ -47,6 +50,7 @@ mesh = SubResource( 4 )
 material/0 = null
 
 [node name="StaticBody" type="StaticBody" parent="Floor3"]
+physics_material_override = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Floor3/StaticBody"]
 shape = SubResource( 5 )
@@ -58,6 +62,7 @@ mesh = SubResource( 4 )
 material/0 = null
 
 [node name="StaticBody" type="StaticBody" parent="Floor4"]
+physics_material_override = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Floor4/StaticBody"]
 shape = SubResource( 5 )
