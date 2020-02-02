@@ -187,12 +187,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.507, 0, -1.398 )
 use_as_traction = true
 wheel_roll_influence = 1.0
 wheel_radius = 0.58
-wheel_friction_slip = 1.0
+wheel_friction_slip = 10.0
 suspension_travel = 0.15
-suspension_stiffness = 30.0
-suspension_max_force = 4000.0
+suspension_stiffness = 200.0
+suspension_max_force = 7000.0
 damping_compression = 0.5
-damping_relaxation = 1.0
+damping_relaxation = 10.0
 
 [node name="wheel_back_left" type="MeshInstance" parent="WheelBL"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
@@ -205,12 +205,12 @@ use_as_traction = true
 use_as_steering = true
 wheel_roll_influence = 1.0
 wheel_radius = 0.58
-wheel_friction_slip = 1.0
+wheel_friction_slip = 10.0
 suspension_travel = 0.15
-suspension_stiffness = 30.0
-suspension_max_force = 4000.0
+suspension_stiffness = 200.0
+suspension_max_force = 7000.0
 damping_compression = 0.5
-damping_relaxation = 1.0
+damping_relaxation = 10.0
 
 [node name="wheel_front_right" type="MeshInstance" parent="WheelFR"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
@@ -223,12 +223,12 @@ use_as_traction = true
 use_as_steering = true
 wheel_roll_influence = 1.0
 wheel_radius = 0.58
-wheel_friction_slip = 1.0
+wheel_friction_slip = 10.0
 suspension_travel = 0.15
-suspension_stiffness = 30.0
-suspension_max_force = 4000.0
+suspension_stiffness = 200.0
+suspension_max_force = 7000.0
 damping_compression = 0.5
-damping_relaxation = 1.0
+damping_relaxation = 10.0
 
 [node name="wheel_front_left" type="MeshInstance" parent="WheelFL"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
@@ -237,15 +237,16 @@ material/0 = null
 
 [node name="WheelBR" type="VehicleWheel" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.507, 0, -1.398 )
+engine_force = 1.54143e-43
 use_as_traction = true
 wheel_roll_influence = 1.0
 wheel_radius = 0.58
-wheel_friction_slip = 1.0
+wheel_friction_slip = 10.0
 suspension_travel = 0.15
-suspension_stiffness = 30.0
-suspension_max_force = 4000.0
+suspension_stiffness = 200.0
+suspension_max_force = 7000.0
 damping_compression = 0.5
-damping_relaxation = 1.0
+damping_relaxation = 10.0
 
 [node name="wheel_back_right" type="MeshInstance" parent="WheelBR"]
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
