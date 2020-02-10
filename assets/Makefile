@@ -1,0 +1,2 @@
+assets:
+	$(MAKE) -C gimp
