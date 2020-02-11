@@ -1,0 +1,13 @@
+Gameplay
+	- ball cam
+	- rest of the dodge directions (8 in total)
+	- demolitions
+	- goals
+	- better driving on walls
+Technical
+	- swappable car components
+	- paintable components
+	- standardized size for gameplay entities
+	- bots
+	- multiplayer
+	- server discovery model
