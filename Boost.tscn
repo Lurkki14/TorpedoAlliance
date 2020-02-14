@@ -11,6 +11,7 @@ _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
 curve = SubResource( 1 )
 
 [sub_resource type="ParticlesMaterial" id=3]
+direction = Vector3( 0, 0, 0 )
 spread = 1.5
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 10.0
