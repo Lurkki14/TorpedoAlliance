@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Orange.gd" type="Script" id=1]
+[ext_resource path="res://assets/textures/2Danimation/orangesboost.png" type="Texture" id=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+flags_transparent = true
+flags_unshaded = true
+params_billboard_mode = 3
+particles_anim_h_frames = 8
+particles_anim_v_frames = 2
+particles_anim_loop = true
+albedo_texture = ExtResource( 2 )
+
+[sub_resource type="QuadMesh" id=2]
+
+[node name="OrangesBoost" type="Spatial" groups=[
+"boosts",
+]]
+
+[node name="Orange" type="CPUParticles" parent="."]
+material_override = SubResource( 1 )
+amount = 100
+lifetime = 2.0
+local_coords = false
+draw_order = 1
+mesh = SubResource( 2 )
+emission_shape = 2
+emission_box_extents = Vector3( 0, 0.1, 0.5 )
+direction = Vector3( 0, 0, 0 )
+spread = 2.0
+initial_velocity = 20.0
+initial_velocity_random = 0.5
+angular_velocity = 150.0
+angular_velocity_random = 1.0
+angle = 90.0
+angle_random = 0.5
+scale_amount = 0.5
+anim_speed = 6.0
+anim_offset = 0.5
+anim_offset_random = 0.5
+script = ExtResource( 1 )

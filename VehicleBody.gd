@@ -1,4 +1,5 @@
 extends VehicleBody
+class_name RocketCar
 
 const STEER_SPEED = 1
 const STEER_LIMIT = 0.7
@@ -13,7 +14,6 @@ const MAX_VELOCITY = 20
 # 0 is no jump, 1 is one jump, 2 is two jumps remaining
 var car_jump: int = JUMP_LIMIT
 var reset_jump: bool
-var wheels = []
 var contact_ignore_time: float = CONTACT_IGNORE_MAX_TIME
 
 var steer_angle = 0
@@ -35,9 +35,22 @@ var dodge_prev_vec: Vector3
 
 var count = 0
 
+var wheels = []
+var boost
+var boost_exhausts = []
+
 export var engine_force_value = 400
 
 func _ready():
+	var boosts := SceneLoader.get_scenes("res://scenes/boosts/", "boosts")
+	randomize()
+	boost = boosts[randi() % boosts.size()]
+	
+	for node in get_children():
+		if node is BoostExhaust:
+			node.add_child(boost)
+			boost_exhausts.append(node)
+			
 	dodge_active = false
 	set_contact_monitor(true)
 	set_max_contacts_reported(1)

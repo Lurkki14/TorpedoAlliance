@@ -2,8 +2,8 @@
 
 [ext_resource path="res://VehicleBody.gd" type="Script" id=1]
 [ext_resource path="res://Camera.gd" type="Script" id=2]
-[ext_resource path="res://Boost.tscn" type="PackedScene" id=3]
-[ext_resource path="res://OrangesBoost.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/boosts/Boost.tscn" type="PackedScene" id=3]
+[ext_resource path="res://BoostExhaust.gd" type="Script" id=5]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Cube"
@@ -148,6 +148,13 @@ script = ExtResource( 1 )
 transform = Transform( -1, -1.37965e-08, 8.63273e-08, 0, 0.987469, 0.157813, -8.74228e-08, 0.157813, -0.987469, 0, 2.84, -6.16 )
 script = ExtResource( 2 )
 
+[node name="BoostExhaust" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, -1, -3.25841e-07, 0, 3.25841e-07, -1, 0, 0, -2.184 )
+script = ExtResource( 5 )
+
+[node name="Boost" parent="BoostExhaust" instance=ExtResource( 3 )]
+visible = false
+
 [node name="chassis" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.269924, 0 )
 lod_min_distance = 330.0
@@ -204,6 +211,7 @@ material/0 = null
 
 [node name="WheelFR" type="VehicleWheel" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.507, 0, 1.818 )
+engine_force = 1.17709e-43
 use_as_traction = true
 use_as_steering = true
 wheel_roll_influence = 1.0
@@ -241,6 +249,7 @@ material/0 = null
 
 [node name="WheelBR" type="VehicleWheel" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.507, 0, -1.398 )
+engine_force = -8.35597
 use_as_traction = true
 wheel_roll_influence = 1.0
 wheel_radius = 0.58
@@ -255,14 +264,3 @@ damping_relaxation = 10.0
 transform = Transform( 0.71914, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 mesh = SubResource( 10 )
 material/0 = null
-
-[node name="Spatial" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, -0.999995, 0.00318947, 0, -0.00318947, -0.999995, -0.555062, 0, -2.14323 )
-visible = false
-
-[node name="Spatial2" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, -0.999995, 0.00318947, 0, -0.00318947, -0.999995, 0.622264, 0, -2.14323 )
-visible = false
-
-[node name="OrangesBoost" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.160985, -2.81401 )

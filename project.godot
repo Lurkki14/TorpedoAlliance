@@ -8,9 +8,50 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Spatial",
+"class": "BoostExhaust",
+"language": "GDScript",
+"path": "res://BoostExhaust.gd"
+}, {
+"base": "Resource",
+"class": "CtxFRef1",
+"language": "GDScript",
+"path": "res://utils/goldenGadget/CtxFRef1.gd"
+}, {
+"base": "Resource",
+"class": "CtxFRef2",
+"language": "GDScript",
+"path": "res://utils/goldenGadget/CtxFRef2.gd"
+}, {
+"base": "Resource",
+"class": "GGArray",
+"language": "GDScript",
+"path": "res://utils/goldenGadget/GGArray.gd"
+}, {
+"base": "Resource",
+"class": "GGInternal",
+"language": "GDScript",
+"path": "res://utils/goldenGadget/GGInternal.gd"
+}, {
+"base": "Node",
+"class": "GGTests",
+"language": "GDScript",
+"path": "res://utils/goldenGadget/GGTests.gd"
+}, {
+"base": "VehicleBody",
+"class": "RocketCar",
+"language": "GDScript",
+"path": "res://VehicleBody.gd"
+} ]
 _global_script_class_icons={
-
+"BoostExhaust": "",
+"CtxFRef1": "",
+"CtxFRef2": "",
+"GGArray": "",
+"GGInternal": "",
+"GGTests": "",
+"RocketCar": ""
 }
 
 [application]
@@ -18,6 +59,10 @@ _global_script_class_icons={
 config/name="LibreLeague"
 run/main_scene="res://Field.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+SceneLoader="*res://utils/SceneLoader.gd"
 
 [input]
 
