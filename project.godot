@@ -14,31 +14,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://BoostExhaust.gd"
 }, {
-"base": "Resource",
-"class": "CtxFRef1",
-"language": "GDScript",
-"path": "res://utils/goldenGadget/CtxFRef1.gd"
-}, {
-"base": "Resource",
-"class": "CtxFRef2",
-"language": "GDScript",
-"path": "res://utils/goldenGadget/CtxFRef2.gd"
-}, {
-"base": "Resource",
-"class": "GGArray",
-"language": "GDScript",
-"path": "res://utils/goldenGadget/GGArray.gd"
-}, {
-"base": "Resource",
-"class": "GGInternal",
-"language": "GDScript",
-"path": "res://utils/goldenGadget/GGInternal.gd"
-}, {
-"base": "Node",
-"class": "GGTests",
-"language": "GDScript",
-"path": "res://utils/goldenGadget/GGTests.gd"
-}, {
 "base": "VehicleBody",
 "class": "RocketCar",
 "language": "GDScript",
@@ -46,11 +21,6 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "BoostExhaust": "",
-"CtxFRef1": "",
-"CtxFRef2": "",
-"GGArray": "",
-"GGInternal": "",
-"GGTests": "",
 "RocketCar": ""
 }
 
@@ -67,63 +37,75 @@ SceneLoader="*res://utils/SceneLoader.gd"
 [input]
 
 car_accelerate={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":87,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":7,"axis_value":1.0,"script":null)
  ]
 }
 car_reverse={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":83,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":6,"axis_value":1.0,"script":null)
  ]
 }
 car_steer_left={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":65,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":0,"axis_value":-1.0,"script":null)
  ]
 }
 car_steer_right={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":0,"axis_value":1.0,"script":null)
  ]
 }
 car_jump={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":0,"pressure":0.0,"pressed":false,"script":null)
  ]
 }
 car_pitch_up={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":83,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":1,"axis_value":1.0,"script":null)
  ]
 }
 car_pitch_down={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":87,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":1,"axis_value":-1.0,"script":null)
  ]
 }
 car_yaw_left={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":65,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":0,"axis_value":-1.0,"script":null)
  ]
 }
 car_yaw_right={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":0,"axis_value":1.0,"script":null)
  ]
 }
 car_roll_left={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":81,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":4,"pressure":0.0,"pressed":false,"script":null)
  ]
 }
 car_roll_right={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":69,"unicode":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":5,"pressure":0.0,"pressed":false,"script":null)
  ]
 }
 car_boost={
-"deadzone": 0.5,
+"deadzone": 0.1,
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":0,"button_index":1,"pressure":0.0,"pressed":false,"script":null)
  ]
 }
 

@@ -39,6 +39,22 @@ var wheels = []
 var boost
 var boost_exhausts = []
 
+# Inputs
+var boost_on: bool
+
+var car_pitch_up: bool
+var car_pitch_down: bool
+var car_pitch_force: int
+
+var car_yaw_left: bool
+var car_yaw_right: bool
+var car_yaw_force: int
+
+var car_roll_left: bool
+var car_roll_right: bool
+var car_roll_force: int
+
+
 export var engine_force_value = 400
 
 func _ready():
@@ -103,29 +119,18 @@ func _integrate_forces(state : PhysicsDirectBodyState):
 			dodge_active = false
 		else:
 			state.set_angular_velocity(dodge_basis * 10)
-
-func _physics_process(delta):
-	#print(car_jump)
-	#print(get_rotation())
-	if contact_ignore_time > 0:
-		contact_ignore_time -= delta
-	
-	if get_contact() and contact_ignore_time <= 0:
-		apply_central_impulse(downforce(get_linear_velocity(), get_global_transform().basis.y))
-		#print("downforce: ", downforce(get_linear_velocity(), get_global_transform().basis.y))
-		car_jump = JUMP_LIMIT
-		
+			
+func _input(event):
 	var fwd_mps = transform.basis.xform_inv(linear_velocity).x
 	
-	if Input.is_action_pressed("car_boost"):
-		#print(boost(get_global_transform().basis.z))
-		apply_central_impulse(boost(get_global_transform().basis.z))
+	if event.is_action_pressed("car_boost"):
+		boost_on = true
+	if event.is_action_released("car_boost"):
+		boost_on = false
 	
-	if Input.is_action_just_pressed("car_jump") and car_jump > 0:
-		
+	if event.is_action_pressed("car_jump") and car_jump > 0:
 		# Dodge jump
-		if Input.is_action_pressed("car_accelerate") and car_jump == 1:
-			print("dodge start")
+		if event.is_action_pressed("car_accelerate") and car_jump == 1:
 			dodge_time = 0
 			dodge_basis = get_global_transform().basis.x
 			apply_central_impulse(get_global_transform().basis.z * pitch_force * 2)
@@ -138,49 +143,103 @@ func _physics_process(delta):
 			var force_vector = JUMP_FORCE * y_basis
 			apply_central_impulse(force_vector)
 		car_jump -= 1
+		
+	if event.is_action_pressed("car_pitch_up"):
+		car_pitch_up = true
+		car_pitch_force = event.get_action_strength("car_pitch_up")
+	elif event.is_action_released("car_pitch_up"):
+		car_pitch_up = false
+
+		
+	if event.is_action_pressed("car_pitch_down"):
+		car_pitch_down = true
+		car_pitch_force = event.get_action_strength("car_pitch_down")
+	elif event.is_action_released("car_pitch_down"):
+		car_pitch_down = false
+		
+	# Yaw is allowed if car is on its roof
+	if event.is_action_pressed("car_yaw_left"):
+		car_yaw_left = true
+		car_yaw_force = event.get_action_strength("car_yaw_left")
+	elif event.is_action_released("car_yaw_left"):
+		car_yaw_left = false
+
+	if event.is_action_pressed("car_yaw_right"):
+		car_yaw_right = true
+		car_yaw_force = event.get_action_strength("car_yaw_right")
+	elif event.is_action_released("car_yaw_right"):
+		car_yaw_right = false
+		
+	if event.is_action_pressed("car_roll_left"):
+		car_roll_left = true
+		car_roll_force = event.get_action_strength("car_roll_left")
+	elif event.is_action_released("car_roll_left"):
+		car_roll_left = false
+		
+	if event.is_action_pressed("car_roll_right"):
+		car_roll_right = true
+		car_roll_force = event.get_action_strength("car_roll_right")
+	elif event.is_action_released("car_roll_right"):
+		car_roll_right = false
 	
+	if event.is_action_pressed("car_steer_left"):
+		steer_target = STEER_LIMIT * event.get_action_strength("car_steer_left")
+	elif event.is_action_pressed("car_steer_right"):
+		steer_target = -STEER_LIMIT * event.get_action_strength("car_steer_right")
+	elif event.is_action_released("car_steer_left") or event.is_action_released("car_steer_right"):
+		steer_target = 0
+		
+	if event.is_action_pressed("car_accelerate"):
+		engine_force = engine_force_value * event.get_action_strength("car_accelerate")
+	if event.is_action_released("car_accelerate"):
+		engine_force = 0
+	
+	if event.is_action_pressed("car_reverse"):
+		if (fwd_mps >= -1):
+			engine_force = -engine_force_value * event.get_action_strength("car_reverse")
+		else:
+			brake = 80 * event.get_action_strength("car_reverse")
+	elif event.is_action_released("car_reverse"):
+		brake = 1
+		engine_force = 0
+
+func _physics_process(delta):
+	#print(car_jump)
+	#print(get_rotation())
+	if boost_on:
+		apply_central_impulse(boost(get_global_transform().basis.z))
+		
+	if not wheel_contact() and not body_contact():
+		if car_pitch_up:
+			apply_torque_impulse(-torque(get_global_transform().basis.x, pitch_force) * car_pitch_force)
+			
+		if car_pitch_down:
+			apply_torque_impulse(torque(get_global_transform().basis.x, pitch_force) * car_pitch_force)
+			
+	if not wheel_contact():
+		if car_yaw_left:
+			apply_torque_impulse(torque(get_global_transform().basis.y, pitch_force) * car_yaw_force)
+			
+		if car_yaw_right:
+			apply_torque_impulse(-torque(get_global_transform().basis.y, pitch_force) * car_yaw_force)
+			
+		if car_roll_left:
+			apply_torque_impulse(-torque(get_global_transform().basis.z, pitch_force) * car_roll_force)
+			
+		if car_roll_right:
+			apply_torque_impulse(torque(get_global_transform().basis.z, pitch_force) * car_roll_force)
+		
+	if contact_ignore_time > 0:
+		contact_ignore_time -= delta
+	
+	if get_contact() and contact_ignore_time <= 0:
+		apply_central_impulse(downforce(get_linear_velocity(), get_global_transform().basis.y))
+		#print("downforce: ", downforce(get_linear_velocity(), get_global_transform().basis.y))
+		car_jump = JUMP_LIMIT
+		
 	if not dodge_active:
 		var ct = countertorque()
 		apply_torque_impulse(ct)
-	
-	if Input.is_action_pressed("car_pitch_up") and not wheel_contact() and not body_contact():
-		apply_torque_impulse(-torque(get_global_transform().basis.x, pitch_force))
-		
-	if Input.is_action_pressed("car_pitch_down") and not wheel_contact() and not body_contact():
-		apply_torque_impulse(torque(get_global_transform().basis.x, pitch_force))
-		
-	# Yaw is allowed if car is on its roof
-	if Input.is_action_pressed("car_yaw_left") and not wheel_contact():
-		apply_torque_impulse(torque(get_global_transform().basis.y, pitch_force))
-		
-	if Input.is_action_pressed("car_yaw_right") and not wheel_contact():
-		apply_torque_impulse(-torque(get_global_transform().basis.y, pitch_force))
-	
-	if Input.is_action_pressed("car_roll_right") and not wheel_contact():
-		apply_torque_impulse(torque(get_global_transform().basis.z, pitch_force))
-		
-	if Input.is_action_pressed("car_roll_left") and not wheel_contact():
-		apply_torque_impulse(-torque(get_global_transform().basis.z, pitch_force))
-	
-	if Input.is_action_pressed("car_steer_left"):
-		steer_target = STEER_LIMIT
-	elif Input.is_action_pressed("car_steer_right"):
-		steer_target = -STEER_LIMIT
-	else:
-		steer_target = 0
-	
-	if Input.is_action_pressed("car_accelerate"):
-		engine_force = engine_force_value
-	else:
-		engine_force = 0
-	
-	if Input.is_action_pressed("car_reverse"):
-		if (fwd_mps >= -1):
-			engine_force = -engine_force_value
-		else:
-			brake = 80
-	else:
-		brake = 0.1
 	
 	if steer_target < steer_angle:
 		steer_angle -= STEER_SPEED * delta
