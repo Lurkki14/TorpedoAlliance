@@ -11,6 +11,9 @@ const CONTACT_IGNORE_MAX_TIME: float = 5.0/60.0
 
 const BOOST_FORCE = 50
 const MAX_VELOCITY = 20
+
+const IDLE_BRAKE_FORCE = 1
+const BRAKE_FORCE = 80
 # 0 is no jump, 1 is one jump, 2 is two jumps remaining
 var car_jump: int = JUMP_LIMIT
 var reset_jump: bool
@@ -42,17 +45,21 @@ var boost_exhausts = []
 # Inputs
 var boost_on: bool
 
+var engine_input: int
+
+var brake_input: int
+
 var car_pitch_up: bool
 var car_pitch_down: bool
-var car_pitch_force: int
+var car_pitch_strength: int
 
 var car_yaw_left: bool
 var car_yaw_right: bool
-var car_yaw_force: int
+var car_yaw_strength: int
 
 var car_roll_left: bool
 var car_roll_right: bool
-var car_roll_force: int
+var car_roll_strength: int
 
 
 export var engine_force_value = 400
@@ -73,6 +80,8 @@ func _ready():
 	for node in get_children():
 		if node is VehicleWheel:
 			wheels.append(node)
+			
+	brake_input = IDLE_BRAKE_FORCE
 
 func body_contact() -> bool:
 	return get_colliding_bodies().size() > 0
@@ -146,40 +155,43 @@ func _input(event):
 		
 	if event.is_action_pressed("car_pitch_up"):
 		car_pitch_up = true
-		car_pitch_force = event.get_action_strength("car_pitch_up")
-	elif event.is_action_released("car_pitch_up"):
+		car_pitch_strength = event.get_action_strength("car_pitch_up")
+		print("car_pitch_up: ", car_pitch_strength)
+	if event.is_action_released("car_pitch_up"):
 		car_pitch_up = false
 
 		
 	if event.is_action_pressed("car_pitch_down"):
 		car_pitch_down = true
-		car_pitch_force = event.get_action_strength("car_pitch_down")
-	elif event.is_action_released("car_pitch_down"):
+		car_pitch_strength = event.get_action_strength("car_pitch_down")
+		print("car_pitch_down: ", car_pitch_strength)
+	if event.is_action_released("car_pitch_down"):
 		car_pitch_down = false
 		
-	# Yaw is allowed if car is on its roof
 	if event.is_action_pressed("car_yaw_left"):
 		car_yaw_left = true
-		car_yaw_force = event.get_action_strength("car_yaw_left")
-	elif event.is_action_released("car_yaw_left"):
+		car_yaw_strength = event.get_action_strength("car_yaw_left")
+		print("car_yaw_left: ", car_yaw_strength)
+	if event.is_action_released("car_yaw_left"):
 		car_yaw_left = false
 
 	if event.is_action_pressed("car_yaw_right"):
 		car_yaw_right = true
-		car_yaw_force = event.get_action_strength("car_yaw_right")
-	elif event.is_action_released("car_yaw_right"):
+		car_yaw_strength = event.get_action_strength("car_yaw_right")
+		print("car_yaw_right: ", car_yaw_strength)
+	if event.is_action_released("car_yaw_right"):
 		car_yaw_right = false
 		
 	if event.is_action_pressed("car_roll_left"):
 		car_roll_left = true
-		car_roll_force = event.get_action_strength("car_roll_left")
-	elif event.is_action_released("car_roll_left"):
+		car_roll_strength = event.get_action_strength("car_roll_left")
+	if event.is_action_released("car_roll_left"):
 		car_roll_left = false
 		
 	if event.is_action_pressed("car_roll_right"):
 		car_roll_right = true
-		car_roll_force = event.get_action_strength("car_roll_right")
-	elif event.is_action_released("car_roll_right"):
+		car_roll_strength = event.get_action_strength("car_roll_right")
+	if event.is_action_released("car_roll_right"):
 		car_roll_right = false
 	
 	if event.is_action_pressed("car_steer_left"):
@@ -190,18 +202,18 @@ func _input(event):
 		steer_target = 0
 		
 	if event.is_action_pressed("car_accelerate"):
-		engine_force = engine_force_value * event.get_action_strength("car_accelerate")
+		engine_input = engine_force_value * event.get_action_strength("car_accelerate")
 	if event.is_action_released("car_accelerate"):
-		engine_force = 0
+		engine_input = 0
 	
 	if event.is_action_pressed("car_reverse"):
 		if (fwd_mps >= -1):
-			engine_force = -engine_force_value * event.get_action_strength("car_reverse")
+			engine_input = -engine_force_value * event.get_action_strength("car_reverse")
 		else:
-			brake = 80 * event.get_action_strength("car_reverse")
-	elif event.is_action_released("car_reverse"):
-		brake = 1
-		engine_force = 0
+			brake_input = BRAKE_FORCE * event.get_action_strength("car_reverse")
+	if event.is_action_released("car_reverse"):
+		brake_input = IDLE_BRAKE_FORCE
+		engine_input = 0
 
 func _physics_process(delta):
 	#print(car_jump)
@@ -211,23 +223,24 @@ func _physics_process(delta):
 		
 	if not wheel_contact() and not body_contact():
 		if car_pitch_up:
-			apply_torque_impulse(-torque(get_global_transform().basis.x, pitch_force) * car_pitch_force)
+			apply_torque_impulse(-torque(get_global_transform().basis.x, pitch_force) * car_pitch_strength)
 			
 		if car_pitch_down:
-			apply_torque_impulse(torque(get_global_transform().basis.x, pitch_force) * car_pitch_force)
-			
+			apply_torque_impulse(torque(get_global_transform().basis.x, pitch_force) * car_pitch_strength)
+	
+	# Yaw and roll is allowed if car is on its roof
 	if not wheel_contact():
 		if car_yaw_left:
-			apply_torque_impulse(torque(get_global_transform().basis.y, pitch_force) * car_yaw_force)
+			apply_torque_impulse(torque(get_global_transform().basis.y, pitch_force) * car_yaw_strength)
 			
 		if car_yaw_right:
-			apply_torque_impulse(-torque(get_global_transform().basis.y, pitch_force) * car_yaw_force)
+			apply_torque_impulse(-torque(get_global_transform().basis.y, pitch_force) * car_yaw_strength)
 			
 		if car_roll_left:
-			apply_torque_impulse(-torque(get_global_transform().basis.z, pitch_force) * car_roll_force)
+			apply_torque_impulse(-torque(get_global_transform().basis.z, pitch_force) * car_roll_strength)
 			
 		if car_roll_right:
-			apply_torque_impulse(torque(get_global_transform().basis.z, pitch_force) * car_roll_force)
+			apply_torque_impulse(torque(get_global_transform().basis.z, pitch_force) * car_roll_strength)
 		
 	if contact_ignore_time > 0:
 		contact_ignore_time -= delta
@@ -250,7 +263,9 @@ func _physics_process(delta):
 		if steer_target < steer_angle:
 			steer_angle = steer_target
 	
+	engine_force = engine_input
 	steering = steer_angle
+	brake = brake_input
 	
 	count = count + delta
 	
