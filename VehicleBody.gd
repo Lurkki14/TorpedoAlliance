@@ -39,7 +39,7 @@ var dodge_prev_vec: Vector3
 var count = 0
 
 var wheels = []
-var boost
+var boost: Node
 var boost_exhausts = []
 
 # Inputs
@@ -82,6 +82,16 @@ func _ready():
 			wheels.append(node)
 			
 	brake_input = IDLE_BRAKE_FORCE
+
+func set_boost(new_boost: Node) -> void:
+	print(new_boost)
+	pass
+#	FIXME: boost doesn't appear on the car
+#	boost = new_boost
+#	for exhaust in boost_exhausts:
+#		for boost_n in exhaust.get_children():
+#			exhaust.remove_child(boost_n)
+#		exhaust.add_child(new_boost)
 
 func body_contact() -> bool:
 	return get_colliding_bodies().size() > 0

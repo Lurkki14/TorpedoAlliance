@@ -14,31 +14,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://BoostExhaust.gd"
 }, {
-"base": "Resource",
-"class": "CtxFRef1",
-"language": "GDScript",
-"path": "res://utils/goldenGadget/CtxFRef1.gd"
-}, {
-"base": "Resource",
-"class": "CtxFRef2",
-"language": "GDScript",
-"path": "res://utils/goldenGadget/CtxFRef2.gd"
-}, {
-"base": "Resource",
-"class": "GGArray",
-"language": "GDScript",
-"path": "res://utils/goldenGadget/GGArray.gd"
-}, {
-"base": "Resource",
-"class": "GGInternal",
-"language": "GDScript",
-"path": "res://utils/goldenGadget/GGInternal.gd"
-}, {
-"base": "Node",
-"class": "GGTests",
-"language": "GDScript",
-"path": "res://utils/goldenGadget/GGTests.gd"
-}, {
 "base": "VehicleBody",
 "class": "RocketCar",
 "language": "GDScript",
@@ -46,11 +21,6 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "BoostExhaust": "",
-"CtxFRef1": "",
-"CtxFRef2": "",
-"GGArray": "",
-"GGInternal": "",
-"GGTests": "",
 "RocketCar": ""
 }
 

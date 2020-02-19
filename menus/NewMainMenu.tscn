@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Field.tscn" type="PackedScene" id=1]
 [ext_resource path="res://menus/NewMainMenu.gd" type="Script" id=2]
-[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://menus/CarEditor.tscn" type="PackedScene" id=4]
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 2 )
@@ -16,16 +16,21 @@ fov = 40.6
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
-margin_right = 307.0
-margin_bottom = 731.0
+margin_left = 55.0
+margin_top = 37.0
+margin_right = 337.0
+margin_bottom = 202.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Button" type="Button" parent="CanvasLayer/HBoxContainer"]
-margin_right = 307.0
-margin_bottom = 70.0
+margin_right = 282.0
+margin_bottom = 20.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
-text = "HELLO"
-icon = ExtResource( 3 )
+text = "EDIT CAR"
+
+[node name="CarEditor" parent="CanvasLayer" instance=ExtResource( 4 )]
+visible = false
+[connection signal="pressed" from="CanvasLayer/HBoxContainer/Button" to="." method="_edit_car"]
